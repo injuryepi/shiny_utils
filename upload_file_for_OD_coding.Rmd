@@ -40,7 +40,7 @@ To select multiple variables, click on each variable you want to include. To rem
 
 ```{r}
 
-fileInput('file10', 'Choose CSV File',
+fileInput('file10', 'Find the CSV file with ICD-10-CM',
                   accept=c('text/csv', '.csv'))
 
 
@@ -59,7 +59,7 @@ actionButton("submit", "Submit")
 Row {data-height = 1000}
 -----------------------------------------------------------------------
 
-### New Data Output With Additional Variables
+### Preview The New Data Output With The Additional OD Variables
 
 
 ```{r}
@@ -119,7 +119,7 @@ reactive(outputdata10_2())
 
 ```
 
-Row {data-height = 50}
+Row {data-height = 10}
 ------------------------------
 
 ### Download The New File
@@ -159,7 +159,7 @@ For each variable you can select (click) or remove(backspace) multiple values.
 
 ```{r}
 
-fileInput('file9', 'Choose CSV File',
+fileInput('file9', 'Find the CSV file with ICD-9-CM',
                   accept=c('text/csv', '.csv'))
 
 selectizeInput('diag1', 'Principal Diagnosis', choices = NULL, multiple = F)
@@ -179,7 +179,7 @@ actionButton("go", "Submit")
 Row {data-height = 1000}
 -----------------------------------------------------------------------
 
-### New Data Output With Additional Variables
+### Preview The New Data Output With The Additional OD Variables
 
 
 ```{r}
@@ -250,7 +250,7 @@ reactive(outputdata2())
 ```
 
 
-Row {data-height = 50}
+Row {data-height = 10}
 ------------------------------
 
 ### Download The New File
@@ -283,7 +283,7 @@ README
 
 <H4> Uploading files </H4>  
 
-You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
+You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, separate the dataset with ICD-9-CM from the dataset with ICD-10-CM. In addition the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
 
 <H4> Source Codes </H4>  
 
