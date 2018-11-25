@@ -1,0 +1,314 @@
+---
+title: "Adding Overdose Columns From ICD-9-CM and ICD-10-CM"
+author: Mamadou Ndiaye
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    theme: paper
+    source_code: embed
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(DT)
+library(tidyverse)
+
+# source relevant functions from github
+
+source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_drug_apr_icd9cm.R")
+
+source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_drug_apr_icd10cm.R")
+
+source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_create_diag_9.R")
+
+source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_create_diag.r")
+
+```
+
+ICD-10-CM
+=====================================    
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+</br>
+
+To select multiple variables, click on each variable you want to include. To remove a variable already selected, click on the variable then hit backspace.  
+
+</br>
+
+```{r}
+
+fileInput('file10', 'Choose CSV File',
+                  accept=c('text/csv', '.csv'))
+
+
+selectizeInput('ediag10', 'Diagnosis and Ecode fields', choices = NULL, multiple = TRUE)
+
+selectizeInput('uid10', 'Unique ID', choices = NULL, multiple = F)
+
+# Download Button
+
+actionButton("submit", "Submit")
+
+
+```
+
+
+Row {data-height = 1000}
+-----------------------------------------------------------------------
+
+### New Data Output With Additional Variables
+
+
+```{r}
+
+hosp_data10 <- reactive({
+
+      infile10 <- input$file10
+
+      req(infile10)
+
+      read_csv(infile10$datapath)
+
+    })
+
+
+```
+
+
+
+```{r}
+observeEvent(input$file10,{
+ updateSelectizeInput(session, 'ediag10', choices = names(hosp_data10()))
+ })
+
+```
+
+
+```{r}
+observeEvent(input$file10,{
+ updateSelectizeInput(session, 'uid10', choices = names(hosp_data10()))
+ })
+
+```
+
+
+```{r}
+
+outputdata10 <- 
+reactive(if(!is.null(input$ediag10) && !is.null(input$uid)){ 
+                hosp_data10()[, !duplicated(unlist(list(strsplit(input$ediag10,","), strsplit(input$uid10,",")))), drop = F]})
+
+
+```
+
+```{r}
+
+dxm10 <- reactive(1:(ncol(outputdata10())-1))
+
+
+outputdata10_2 <- eventReactive(input$submit, {outputdata10() %>%
+	  od_drug_apr_icd10cm(., diag_ecode_col = dxm10())})
+
+reactive(outputdata10_2())
+
+```
+
+Row {data-height = 50}
+------------------------------
+
+### Download The New File
+
+```{r}
+
+p(downloadButton("download10", "Download file", class = "btn-primary"))
+
+```
+
+```{r}
+# Downloadable csv of the new file
+  output$download10 <- downloadHandler(
+    filename = function() {
+      paste0("new_", input$file10)
+    },
+    content = function(file) {
+      write_csv(outputdata10_2(), file)
+    }
+  )
+
+```
+
+
+
+ICD-9-CM
+=====================================  
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+
+</br>
+
+For each variable you can select (click) or remove(backspace) multiple values.
+
+</br>
+
+```{r}
+
+fileInput('file9', 'Choose CSV File',
+                  accept=c('text/csv', '.csv'))
+
+selectizeInput('diag1', 'Principal Diagnosis', choices = NULL, multiple = F)
+
+selectizeInput('ediag', 'Diagnosis and Ecode fields', choices = NULL, multiple = TRUE)
+
+selectizeInput('uid', 'Unique ID', choices = NULL, multiple = F)
+
+# Download Button
+
+actionButton("go", "Submit")
+
+
+```
+
+
+Row {data-height = 1000}
+-----------------------------------------------------------------------
+
+### New Data Output With Additional Variables
+
+
+```{r}
+
+hosp_data <- reactive({
+
+      infile <- input$file9
+
+      req(infile)
+
+      read_csv(infile$datapath)
+
+    })
+
+
+```
+
+
+
+```{r}
+observeEvent(input$file9,{
+  updateSelectizeInput(session, 'diag1', choices = names(hosp_data()))
+  
+})
+
+```
+
+```{r}
+observeEvent(input$file9,{
+ updateSelectizeInput(session, 'ediag', choices = names(hosp_data()))
+ })
+
+```
+
+
+```{r}
+observeEvent(input$file9,{
+ updateSelectizeInput(session, 'uid', choices = names(hosp_data()))
+ })
+
+```
+
+
+```{r}
+
+outputdata <- 
+reactive(if(!is.null(input$diag1) && !is.null(input$ediag) && !is.null(input$uid)){ 
+                hosp_data()[, !duplicated(unlist(list(strsplit(input$diag1,","), strsplit(input$ediag,","), strsplit(input$uid,",")))), drop = F]})
+
+
+```
+
+
+```{r}
+
+dxm <- reactive(2:(ncol(outputdata())-1))
+
+
+outputdata2 <- eventReactive(input$go, {outputdata() %>% 
+	  od_drug_apr_icd9cm(., diag_col = 1, ecode_col = dxm())})
+
+reactive(outputdata2())
+
+```
+
+
+Row {data-height = 50}
+------------------------------
+
+### Download The New File
+
+```{r}
+
+p(downloadButton("download", "Download file", class = "btn-primary"))
+
+```
+
+```{r}
+# Downloadable csv of selected dataset ----
+  output$download <- downloadHandler(
+    filename = function() {
+      paste0("new_", input$file9)
+    },
+    content = function(file) {
+      write_csv(outputdata2(), file)
+    }
+  )
+
+```
+
+README
+=====================================   
+
+</br>
+
+</br>
+
+<H4> Source Codes </H4> 
+
+<H4> Overdose Definitions </H4>  
+
+1. ICD-9-CM   
+
+- __All drug__: Principal diagnosis of _960-979_   
+OR any E-code of _E850-E858, E950.0-E950.5, E962.0, E980.0-E980.5_  
+
+- __Heroin__: Principal diagnosis of _965.01_   
+OR any E-code _E850.0_    
+
+- __Non-Heroin Opioid__: Principal diagnosis of _965.00, 965.02, 965.09_   
+OR any E-code of _E850.1, E850.2_      
+Then exclude any cases of heroin as defined above.      
+
+
+2. ICD-10-CM    
+
+- __All drug__: Any diagnosis of _T36-T50_  
+AND a 6th character of _1,2,3, or 4_ for _T36.9, T37.9, T39.9, T41.4, T42.7, T43.9, T45.9, T47.9, and T49.9_, or a 5th character of _1,2,3, or 4_ for all the others _T36-T50_  
+AND a 7th character of _A or missing_  
+
+- __Heroin__: Any diagnosis of _T40.1X_  
+AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_
+
+- __Non-Heroin Opioid__: Any diagnosis of _T40.0X, T40.2X, T40.3X, T40.4X,T40.60, T40.69_  
+AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_,  
+Then exclude any cases of heroin as defined above.   
+
+
+
+
+
+
+
