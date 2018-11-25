@@ -98,8 +98,11 @@ observeEvent(input$file10,{
 ```{r}
 
 outputdata10 <- 
-reactive(if(!is.null(input$ediag10) && !is.null(input$uid)){ 
-                hosp_data10()[, !duplicated(unlist(list(strsplit(input$ediag10,","), strsplit(input$uid10,",")))), drop = F]})
+reactive(if(!is.null(input$ediag10) && !is.null(input$uid)){
+  sel10 = unique(unlist(list(strsplit(input$ediag10,","), strsplit(input$uid10,","))))
+                hosp_data10() %>% 
+                  select(!!sel10, everything())
+                })
 
 
 ```
@@ -224,7 +227,11 @@ observeEvent(input$file9,{
 
 outputdata <- 
 reactive(if(!is.null(input$diag1) && !is.null(input$ediag) && !is.null(input$uid)){ 
-                hosp_data()[, !duplicated(unlist(list(strsplit(input$diag1,","), strsplit(input$ediag,","), strsplit(input$uid,",")))), drop = F]})
+  sel9 = unique(unlist(list(strsplit(input$diag1,","), strsplit(input$ediag,","), strsplit(input$uid,","))))
+                hosp_data() %>% 
+                  select(!!sel9, everything())
+                })
+
 
 
 ```
