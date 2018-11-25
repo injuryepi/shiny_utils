@@ -274,7 +274,23 @@ README
 
 </br>
 
-<H4> Source Codes </H4> 
+<H4> Uploading files </H4>  
+
+You need only to upload the diagnosis and E-code fields of your dataset, and electively a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
+
+<H4> Source Codes </H4>  
+
+1. Find the source rmarkdown code of this document at [GitHub](https://github.com/injuryepi/shiny_utils/blob/master/upload_file_for_OD_coding.Rmd)  
+
+2. The main R functions for coding the drug overdoses are:  
+
+- [od_drug_apr_icd9cm()](https://github.com/injuryepi/overdoser/blob/master/R/od_drug_apr_icd9cm.R) 
+
+- [od_create_diag_9()](https://github.com/injuryepi/overdoser/blob/master/R/od_create_diag_9.R)  
+
+- [od_create_diag()](https://github.com/injuryepi/overdoser/blob/master/R/od_create_diag.r)  
+
+- [od_drug_apr_icd10cm()](https://github.com/injuryepi/overdoser/blob/master/R/od_drug_apr_icd10cm.R) 
 
 <H4> Overdose Definitions </H4>  
 
