@@ -276,7 +276,7 @@ README
 
 <H4> Uploading files </H4>  
 
-You need only to upload the diagnosis and E-code fields of your dataset, and electively a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
+You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
 
 <H4> Source Codes </H4>  
 
