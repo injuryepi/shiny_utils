@@ -281,6 +281,11 @@ README
 
 </br>
 
+<h5 style='color:darkblue;font-weight:bold;background-color:yellow'> This shiny application was designed for testing and proof of concept. For any privacy concern, build and use the application locally.
+</h5>
+
+</br>
+
 <H4> Uploading files </H4>  
 
 You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, separate the dataset with ICD-9-CM from the dataset with ICD-10-CM. In addition the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
