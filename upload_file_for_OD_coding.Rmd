@@ -1,6 +1,6 @@
 ---
 title: "Adding Overdose Columns From ICD-9-CM and ICD-10-CM"
-author: Mamadou Ndiaye
+author: epinotes
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -18,11 +18,11 @@ library(tidyverse)
 
 source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_drug_apr_icd9cm.R")
 
-source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_drug_apr_icd10cm.R")
+source("https://raw.githubusercontent.com/epinotes/useicd10cm/master/R/icd_drug_opioid.R")
 
 source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_create_diag_9.R")
 
-source("https://raw.githubusercontent.com/injuryepi/overdoser/master/R/od_create_diag.r")
+source("https://raw.githubusercontent.com/epinotes/useicd10cm/master/R/icd_new_diag.R")
 
 ```
 
@@ -113,7 +113,7 @@ dxm10 <- reactive(1:(ncol(outputdata10())-1))
 
 
 outputdata10_2 <- eventReactive(input$submit, {outputdata10() %>%
-	  od_drug_apr_icd10cm(., diag_ecode_col = dxm10())})
+	  icd_drug_opioid(., diag_ecode_col = dxm10())})
 
 reactive(outputdata10_2())
 
@@ -245,6 +245,7 @@ dxm <- reactive(2:(ncol(outputdata())-1))
 outputdata2 <- eventReactive(input$go, {outputdata() %>% 
 	  od_drug_apr_icd9cm(., diag_col = 1, ecode_col = dxm())})
 
+
 reactive(outputdata2())
 
 ```
@@ -281,14 +282,15 @@ README
 
 </br>
 
-<h5 style='color:darkblue;font-weight:bold;background-color:yellow'> This shiny application was designed for testing and proof of concept. For any privacy concern, build and use the application locally.
+<h5 style='color:darkblue;font-weight:bold;background-color:yellow'> This shiny application was designed for testing and proof of concept, not for uploading confidential data. You can build and use the application locally.
 </h5>
 
 </br>
 
 <H4> Uploading files </H4>  
 
-You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, separate the dataset with ICD-9-CM from the dataset with ICD-10-CM. In addition the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer)
+You need only to upload the diagnosis and E-code fields of your dataset, and a unique ID field to ease joining back the newly coded file to its source file. Before uploading the file into the shiny app, separate the dataset with ICD-9-CM from the dataset with ICD-10-CM. In addition the unique ID can be anonymized using methods provided by the R package [anonymizer](https://github.com/paulhendricks/anonymizer).
+ You can file any issue at the github page or email __epinotes@gmail.com__
 
 <H4> Source Codes </H4>  
 
@@ -300,9 +302,9 @@ You need only to upload the diagnosis and E-code fields of your dataset, and a u
 
 - [od_create_diag_9()](https://github.com/injuryepi/overdoser/blob/master/R/od_create_diag_9.R)  
 
-- [od_create_diag()](https://github.com/injuryepi/overdoser/blob/master/R/od_create_diag.r)  
+- [icd_new_diag()](https://github.com/epinotes/useicd10cm/blob/master/R/icd_new_diag.R)  
 
-- [od_drug_apr_icd10cm()](https://github.com/injuryepi/overdoser/blob/master/R/od_drug_apr_icd10cm.R) 
+- [icd_drug_opioid()](https://github.com/epinotes/useicd10cm/blob/master/R/icd_drug_opioid.R) 
 
 <H4> Overdose Definitions </H4>  
 
@@ -332,7 +334,15 @@ AND a 7th character of _A or missing_
 - __Non-Heroin Opioid__: Any diagnosis of _T40.0X, T40.2X, T40.3X, T40.4X,T40.60, T40.69_  
 AND a 6th character of _1,2,3, or 4_  
 AND a 7th character of _A or missing_,  
-Then exclude any cases of heroin as defined above.   
+Then exclude any cases of heroin as defined above. 
+
+- __All Opioid__: Any diagnosis of _T40.0X, T40.1X, T40.2X, T40.3X, T40.4X, T40.60, T40.60_  
+AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_
+
+- __Stimulant__: Any diagnosis of _T40.5X, T43.60, T43.61, T43.62, T43.63, T43.64, T43.69_  
+AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_
 
 
 
