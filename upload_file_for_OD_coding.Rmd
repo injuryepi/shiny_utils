@@ -329,7 +329,8 @@ AND a 7th character of _A or missing_
 
 - __Heroin__: Any diagnosis of _T40.1X_  
 AND a 6th character of _1,2,3, or 4_  
-AND a 7th character of _A or missing_
+AND a 7th character of _A or missing_  
+
 
 - __Non-Heroin Opioid__: Any diagnosis of _T40.0X, T40.2X, T40.3X, T40.4X,T40.60, T40.69_  
 AND a 6th character of _1,2,3, or 4_  
@@ -342,7 +343,17 @@ AND a 7th character of _A or missing_
 
 - __Stimulant__: Any diagnosis of _T40.5X, T43.60, T43.61, T43.62, T43.63, T43.64, T43.69_  
 AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_  
+
+- __Cocaine__: Any diagnosis of _T40.5X_  
+AND a 6th character of _1,2,3, or 4_  
+AND a 7th character of _A or missing_  
+
+- __Stimulant Not Cocaine__: Any diagnosis of _T43.60, T43.61, T43.62, T43.63, T43.64, T43.69_  
+AND a 6th character of _1,2,3, or 4_  
 AND a 7th character of _A or missing_
+Then exclude any cases of cocaine as defined above. 
+
 
 
 
